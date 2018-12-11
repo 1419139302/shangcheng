@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzy.shopp.app.biz.mapper.PropertyvalueMapper">
+    <resultMap id="BaseResultMap" type="com.zzy.shopp.app.biz.model.Propertyvalue">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="pid" property="pid" jdbcType="BIGINT"/>
+        <result column="ptid" property="ptid" jdbcType="BIGINT"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+    </resultMap>
+    <resultMap id="BaseResultMapTwo" type="com.zzy.shopp.app.biz.model.Propertyvalue">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="pid" property="pid" jdbcType="BIGINT"/>
+        <result column="ptid" property="ptid" jdbcType="BIGINT"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <association property="product" javaType="com.zzy.shopp.app.biz.model.Product" column="pid"
+                     select="getProductByPid">
+            <result column="id" property="id" jdbcType="BIGINT"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="sub_title" property="subTitle" jdbcType="VARCHAR"/>
+            <result column="original_price" property="originalPrice" jdbcType="DOUBLE"/>
+            <result column="promote_pice" property="promotePice" jdbcType="DOUBLE"/>
+            <result column="stock" property="stock" jdbcType="INTEGER"/>
+            <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+            <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+            <result column="is_del" property="isDel" jdbcType="BIT"/>
+            <result column="cid" property="cid" jdbcType="BIGINT"/>
+        </association>
+        <association property="property" javaType="com.zzy.shopp.app.biz.model.Property" column="ptid"
+                     select="getProductByPtid">
+            <result column="id" property="id" jdbcType="BIGINT"/>
+            <result column="cid" property="cid" jdbcType="BIGINT"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+            <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+            <result column="is_del" property="isDel" jdbcType="BIT"/>
+        </association>
+    </resultMap>
+
+    <select id="getProductByPid" resultType="com.zzy.shopp.app.biz.model.Product">
+        SELECT
+        `id`,
+        `cid`,
+        `name`,
+        `sub_title`,
+        `original_price`,
+        `promote_pice`,
+        `stock`,
+        `create_time`,
+        `update_time`,
+        `delete_time`,
+        `is_del`
+        FROM `s_product`
+        <where>
+            `id` = #{pid}
+        </where>
+        LIMIT 1;
+    </select>
+
+    <select id="getProductByPtid" resultType="com.zzy.shopp.app.biz.model.Property">
+        SELECT
+        `id`,
+        `cid`,
+        `name`,
+        `create_time`,
+        `update_time`,
+        `delete_time`,
+        `is_del`
+        FROM `s_property`
+        <where>
+            `id` = #{id}
+        </where>
+        LIMIT 1;
+    </select>
+
+    <sql id="basicSelectSql">
+		`id`,
+		`pid`,
+		`ptid`,
+		`value`,
+		`create_time`,
+		`update_time`,
+		`delete_time`,
+		`is_del`
+	</sql>
+
+    <sql id="basicWhereColumn">
+        <if test="id != null">
+            AND `id` = #{id}
+        </if>
+        <if test="pid != null">
+            AND `pid` = #{pid}
+        </if>
+        <if test="ptid != null">
+            AND `ptid` = #{ptid}
+        </if>
+        <if test="value != null">
+            AND `value` = #{value}
+        </if>
+        <if test="createTime != null">
+            AND `create_time` = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND `update_time` = #{updateTime}
+        </if>
+        <if test="deleteTime != null">
+            AND `delete_time` = #{deleteTime}
+        </if>
+        <if test="isDel != null">
+            AND `is_del` = #{isDel}
+        </if>
+    </sql>
+
+    <sql id="basicWhereEntitySql">
+        <where>
+            <include refid="basicWhereColumn"/>
+        </where>
+    </sql>
+
+    <sql id="basicWhereMapSql">
+        <where>
+            <include refid="basicWhereColumn"/>
+        </where>
+    </sql>
+
+    <select id="getById" resultType="com.zzy.shopp.app.biz.model.Propertyvalue">
+        SELECT
+        <include refid="basicSelectSql"/>
+        FROM `s_propertyvalue`
+        <where>
+            `id` = #{id}
+        </where>
+        LIMIT 1;
+    </select>
+
+    <select id="getList" resultType="com.zzy.shopp.app.biz.model.Propertyvalue">
+        SELECT
+        <include refid="basicSelectSql"/>
+        FROM `s_propertyvalue`
+        <include refid="basicWhereEntitySql"/>
+        ;
+    </select>
+
+    <select id="likeGetList" parameterType="com.zzy.shopp.app.biz.vo.CommonSelectVo"
+            resultMap="BaseResultMapTwo">
+        SELECT
+        <include refid="basicSelectSql"/>
+        FROM `s_propertyvalue`
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="queryCriteria != null">
+                    and CONCAT_WS(' ',
+                    IFNULL(`id`,''),
+                    IFNULL(`pid`,''),
+                    IFNULL(`ptid`,''),
+                    IFNULL(`value`,''),
+                    IFNULL(`create_time`,''),
+                    IFNULL(`update_time`,''),
+                    IFNULL(`delete_time`,''),
+                    IFNULL(`is_del`,'')
+                    ) like CONCAT('%', #{queryCriteria}, '%')
+                </if>
+                <if test="id!=null">
+                    pid = #{id}
+                </if>
+                and is_del = 0
+            </trim>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.zzy.shopp.app.biz.model.Propertyvalue">
+        UPDATE `s_propertyvalue`
+        <set>
+            <if test="pid != null">
+                `pid` = #{pid},
+            </if>
+            <if test="ptid != null">
+                `ptid` = #{ptid},
+            </if>
+            <if test="value != null">
+                `value` = #{value},
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime},
+            </if>
+            <if test="deleteTime != null">
+                `delete_time` = #{deleteTime},
+            </if>
+            <if test="isDel != null">
+                `is_del` = #{isDel},
+            </if>
+        </set>
+        <where>
+            `id` = #{id}
+        </where>
+    </update>
+
+
+    <update id="deleteById" parameterType="com.zzy.shopp.app.biz.model.Propertyvalue">
+        UPDATE `s_propertyvalue`
+        SET `is_del`=1
+        <where>
+            `id` = #{id}
+        </where>
+    </update>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        `s_propertyvalue`
+        (`id`,`pid`,`ptid`,`value`,`create_time`,`update_time`,`delete_time`,`is_del`)
+        VALUES
+        (#{id},#{pid},#{ptid},#{value},#{createTime},#{updateTime},#{deleteTime},#{isDel})
+    </insert>
+
+    <insert id="addList">
+        INSERT INTO
+        `s_propertyvalue`
+        (`id`,`pid`,`ptid`,`value`,`create_time`,`update_time`,`delete_time`,`is_del`)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.pid},#{item.ptid},#{item.value},#{item.createTime},#{item.updateTime},#{item.deleteTime},#{item.isDel})
+        </foreach>
+    </insert>
+
+
+    <select id="listByCategory" parameterType="Long"
+            resultMap="com.zzy.shopp.app.biz.mapper.PropertyMapper.BaseResultMap">
+		SELECT
+            s_property.id,
+            s_property.cid,
+            s_property.`name`,
+            s_property.create_time,
+            s_property.update_time,
+            s_property.delete_time,
+            s_property.is_del
+        FROM
+            s_property,s_category
+        WHERE
+            s_property.is_del = 0 AND
+            s_category.is_del = 0 AND
+            s_category.id = s_property.cid AND
+            s_property.cid = #{id}
+	</select>
+
+    <select id="getByPropertyAndProduct" parameterType="hashmap" resultMap="BaseResultMap">
+		SELECT
+            s_propertyvalue.id,
+            s_propertyvalue.pid,
+            s_propertyvalue.ptid,
+            s_propertyvalue.`value`,
+            s_propertyvalue.create_time,
+            s_propertyvalue.update_time,
+            s_propertyvalue.delete_time,
+            s_propertyvalue.is_del
+        FROM
+            s_propertyvalue
+        WHERE
+            s_propertyvalue.pid = #{pid} AND
+            s_propertyvalue.ptid = #{ptid}
+	</select>
+
+</mapper>

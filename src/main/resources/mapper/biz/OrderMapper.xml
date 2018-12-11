@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzy.shopp.app.biz.mapper.OrderMapper">
+	<resultMap id="BaseResultMap" type="com.zzy.shopp.app.biz.model.Order">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="order_code" property="orderCode" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="post" property="post" jdbcType="VARCHAR"/>
+		<result column="receiver" property="receiver" jdbcType="VARCHAR"/>
+		<result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+		<result column="user_message" property="userMessage" jdbcType="VARCHAR"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="pay_date" property="payDate" jdbcType="TIMESTAMP"/>
+		<result column="delivery_date" property="deliveryDate" jdbcType="TIMESTAMP"/>
+		<result column="confirm_date" property="confirmDate" jdbcType="TIMESTAMP"/>
+		<result column="status" property="status" jdbcType="VARCHAR"/>
+		<result column="uid" property="uid" jdbcType="BIGINT"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+		<result column="is_del" property="isDel" jdbcType="BIT"/>
+	</resultMap>
+	<resultMap id="BaseResultMapTwo" type="com.zzy.shopp.app.biz.model.Order">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="order_code" property="orderCode" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="post" property="post" jdbcType="VARCHAR"/>
+		<result column="receiver" property="receiver" jdbcType="VARCHAR"/>
+		<result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+		<result column="user_message" property="userMessage" jdbcType="VARCHAR"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="pay_date" property="payDate" jdbcType="TIMESTAMP"/>
+		<result column="delivery_date" property="deliveryDate" jdbcType="TIMESTAMP"/>
+		<result column="confirm_date" property="confirmDate" jdbcType="TIMESTAMP"/>
+		<result column="status" property="status" jdbcType="VARCHAR"/>
+		<result column="uid" property="uid" jdbcType="BIGINT"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+		<result column="is_del" property="isDel" jdbcType="BIT"/>
+		<association property="user" javaType="com.zzy.shopp.app.biz.model.User" column="uid" select="getProductByUid">
+			<result column="id" property="id" jdbcType="BIGINT"/>
+			<result column="name" property="name" jdbcType="VARCHAR"/>
+			<result column="password" property="password" jdbcType="VARCHAR"/>
+			<result column="salt" property="salt" jdbcType="VARCHAR"/>
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+			<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+			<result column="is_del" property="isDel" jdbcType="BIT"/>
+		</association>
+		<collection property="orderItems" ofType="com.zzy.shopp.app.biz.model.Orderitem" column="id"
+					select="getOrderItemsByOid">
+			<result column="id" property="id" jdbcType="BIGINT"/>
+			<result column="pid" property="pid" jdbcType="BIGINT"/>
+			<result column="oid" property="oid" jdbcType="BIGINT"/>
+			<result column="uid" property="uid" jdbcType="BIGINT"/>
+			<result column="number" property="number" jdbcType="INTEGER"/>
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+			<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+			<result column="is_del" property="isDel" jdbcType="BIT"/>
+		</collection>
+
+	</resultMap>
+	<resultMap id="BaseResultMapThree" type="com.zzy.shopp.app.biz.model.Orderitem">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="pid" property="pid" jdbcType="BIGINT"/>
+		<result column="oid" property="oid" jdbcType="BIGINT"/>
+		<result column="uid" property="uid" jdbcType="BIGINT"/>
+		<result column="number" property="number" jdbcType="INTEGER"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+		<result column="is_del" property="isDel" jdbcType="BIT"/>
+		<association property="product" javaType="com.zzy.shopp.app.biz.model.Product" column="pid"
+					 select="getProductByPid">
+			<result column="id" property="id" jdbcType="BIGINT"/>
+			<result column="name" property="name" jdbcType="VARCHAR"/>
+			<result column="sub_title" property="subTitle" jdbcType="VARCHAR"/>
+			<result column="original_price" property="originalPrice" jdbcType="DOUBLE"/>
+			<result column="promote_pice" property="promotePice" jdbcType="DOUBLE"/>
+			<result column="stock" property="stock" jdbcType="INTEGER"/>
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+			<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+			<result column="is_del" property="isDel" jdbcType="BIT"/>
+			<result column="cid" property="cid" jdbcType="BIGINT"/>
+		</association>
+		<association property="user" javaType="com.zzy.shopp.app.biz.model.User" column="uid" select="getProductByUid">
+			<result column="id" property="id" jdbcType="BIGINT"/>
+			<result column="name" property="name" jdbcType="VARCHAR"/>
+			<result column="password" property="password" jdbcType="VARCHAR"/>
+			<result column="salt" property="salt" jdbcType="VARCHAR"/>
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+			<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+			<result column="is_del" property="isDel" jdbcType="BIT"/>
+		</association>
+	</resultMap>
+	<sql id="basicSelectSql">
+		`id`,
+		`order_code`,
+		`address`,
+		`post`,
+		`receiver`,
+		`mobile`,
+		`user_message`,
+		`create_date`,
+		`pay_date`,
+		`delivery_date`,
+		`confirm_date`,
+		`status`,
+		`uid`,
+		`create_time`,
+		`update_time`,
+		`delete_time`,
+		`is_del`
+	</sql>
+
+	<sql id="basicWhereColumn">
+		<if test="id != null">
+			AND `id` = #{id}
+		</if>
+		<if test="orderCode != null">
+			AND `order_code` = #{orderCode}
+		</if>
+		<if test="address != null">
+			AND `address` = #{address}
+		</if>
+		<if test="post != null">
+			AND `post` = #{post}
+		</if>
+		<if test="receiver != null">
+			AND `receiver` = #{receiver}
+		</if>
+		<if test="mobile != null">
+			AND `mobile` = #{mobile}
+		</if>
+		<if test="userMessage != null">
+			AND `user_message` = #{userMessage}
+		</if>
+		<if test="createDate != null">
+			AND `create_date` = #{createDate}
+		</if>
+		<if test="payDate != null">
+			AND `pay_date` = #{payDate}
+		</if>
+		<if test="deliveryDate != null">
+			AND `delivery_date` = #{deliveryDate}
+		</if>
+		<if test="confirmDate != null">
+			AND `confirm_date` = #{confirmDate}
+		</if>
+		<if test="status != null">
+			AND `status` = #{status}
+		</if>
+		<if test="uid != null">
+			AND `uid` = #{uid}
+		</if>
+		<if test="createTime != null">
+			AND `create_time` = #{createTime}
+		</if>
+		<if test="updateTime != null">
+			AND `update_time` = #{updateTime}
+		</if>
+		<if test="deleteTime != null">
+			AND `delete_time` = #{deleteTime}
+		</if>
+		<if test="isDel != null">
+			AND `is_del` = #{isDel}
+		</if>
+	</sql>
+
+	<sql id="basicWhereEntitySql">
+		<where>
+			<include refid="basicWhereColumn"/>
+		</where>
+	</sql>
+
+	<sql id="basicWhereMapSql">
+		<where>
+			<include refid="basicWhereColumn"/>
+		</where>
+	</sql>
+
+	<select id="getById" resultType="com.zzy.shopp.app.biz.model.Order">
+		SELECT
+		<include refid="basicSelectSql"/>
+		FROM `s_order`
+		<where>
+			`id` = #{id}
+		</where>
+		LIMIT 1;
+	</select>
+
+	<select id="getList" resultType="com.zzy.shopp.app.biz.model.Order">
+		SELECT
+		<include refid="basicSelectSql"/>
+		FROM `s_order`
+		<include refid="basicWhereEntitySql"/>
+		;
+	</select>
+
+	<select id="likeGetList" parameterType="com.zzy.shopp.app.biz.vo.CommonSelectVo"
+			resultMap="BaseResultMapTwo">
+		SELECT
+		<include refid="basicSelectSql"/>
+		FROM `s_order`
+		<where>
+			<trim prefixOverrides="AND">
+				<if test="queryCriteria != null">
+					and CONCAT_WS(' ',
+					IFNULL(`id`,''),
+					IFNULL(`order_code`,''),
+					IFNULL(`address`,''),
+					IFNULL(`post`,''),
+					IFNULL(`receiver`,''),
+					IFNULL(`mobile`,''),
+					IFNULL(`user_message`,''),
+					IFNULL(`create_date`,''),
+					IFNULL(`pay_date`,''),
+					IFNULL(`delivery_date`,''),
+					IFNULL(`confirm_date`,''),
+					IFNULL(`uid`,''),
+					IFNULL(`create_time`,''),
+					IFNULL(`update_time`,''),
+					IFNULL(`delete_time`,''),
+					IFNULL(`is_del`,'')
+					) like CONCAT('%', #{queryCriteria}, '%')
+				</if>
+				and is_del = 0
+			</trim>
+		</where>
+	</select>
+
+	<update id="update" parameterType="com.zzy.shopp.app.biz.model.Order">
+		UPDATE `s_order`
+		<set>
+			<if test="orderCode != null">
+				`order_code` = #{orderCode},
+			</if>
+			<if test="address != null">
+				`address` = #{address},
+			</if>
+			<if test="post != null">
+				`post` = #{post},
+			</if>
+			<if test="receiver != null">
+				`receiver` = #{receiver},
+			</if>
+			<if test="mobile != null">
+				`mobile` = #{mobile},
+			</if>
+			<if test="userMessage != null">
+				`user_message` = #{userMessage},
+			</if>
+			<if test="createDate != null">
+				`create_date` = #{createDate},
+			</if>
+			<if test="payDate != null">
+				`pay_date` = #{payDate},
+			</if>
+			<if test="deliveryDate != null">
+				`delivery_date` = #{deliveryDate},
+			</if>
+			<if test="confirmDate != null">
+				`confirm_date` = #{confirmDate},
+			</if>
+			<if test="status != null">
+				`status` = #{status},
+			</if>
+			<if test="uid != null">
+				`uid` = #{uid},
+			</if>
+			<if test="updateTime != null">
+				`update_time` = #{updateTime},
+			</if>
+			<if test="deleteTime != null">
+				`delete_time` = #{deleteTime},
+			</if>
+			<if test="isDel != null">
+				`is_del` = #{isDel},
+			</if>
+		</set>
+		<where>
+			`id` = #{id}
+		</where>
+	</update>
+
+
+	<update id="deleteById" parameterType="com.zzy.shopp.app.biz.model.Order">
+		UPDATE `s_order`
+		SET `is_del`=1
+		<where>
+			`id` = #{id}
+		</where>
+	</update>
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        `s_order`
+        (`order_code`,`address`,`post`,`receiver`,`mobile`,`user_message`,`create_date`,`pay_date`,`delivery_date`,`confirm_date`,`status`,`uid`,`create_time`,`update_time`,`delete_time`,`is_del`)
+        VALUES
+        (#{orderCode},#{address},#{post},#{receiver},#{mobile},#{userMessage},#{createDate},#{payDate},#{deliveryDate},#{confirmDate},#{status},#{uid},#{createTime},#{updateTime},#{deleteTime},#{isDel})
+    </insert>
+
+	<insert id="addList">
+		INSERT INTO
+		`s_order`
+		(`id`,`order_code`,`address`,`post`,`receiver`,`mobile`,`user_message`,`create_date`,`pay_date`,`delivery_date`,`confirm_date`,`status`,`uid`,`create_time`,`update_time`,`delete_time`,`is_del`)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id},#{item.orderCode},#{item.address},#{item.post},#{item.receiver},#{item.mobile},#{item.userMessage},#{item.createDate},#{item.payDate},#{item.deliveryDate},#{item.confirmDate},#{item.status},#{item.uid},#{item.createTime},#{item.updateTime},#{item.deleteTime},#{item.isDel})
+		</foreach>
+	</insert>
+
+	<select id="getOrderItemsByOid" resultMap="BaseResultMapThree">
+		SELECT
+		`id`,
+		`pid`,
+		`oid`,
+		`uid`,
+		`number`,
+		`create_time`,
+		`update_time`,
+		`delete_time`,
+		`is_del`
+		FROM `s_orderitem`
+		<where>
+			`oid` = #{id}
+		</where>
+	</select>
+
+	<select id="getProductByPid" resultType="com.zzy.shopp.app.biz.model.Product">
+		SELECT
+		`id`,
+		`cid`,
+		`name`,
+		`sub_title`,
+		`original_price`,
+		`promote_pice`,
+		`stock`,
+		`create_time`,
+		`update_time`,
+		`delete_time`,
+		`is_del`
+		FROM `s_product`
+		<where>
+			`id` = #{pid}
+		</where>
+		LIMIT 1;
+	</select>
+
+	<select id="getProductByUid" resultType="com.zzy.shopp.app.biz.model.User">
+		SELECT
+		`id`,
+		`name`,
+		`password`,
+		`salt`,
+		`create_time`,
+		`update_time`,
+		`delete_time`,
+		`is_del`
+		FROM `s_user`
+		<where>
+			`id` = #{uid}
+		</where>
+		LIMIT 1;
+	</select>
+</mapper>

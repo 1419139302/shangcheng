@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzy.shopp.app.biz.mapper.CategoryMapper">
+	<resultMap id="BaseResultMap" type="com.zzy.shopp.app.biz.model.Category">
+		<!--
+          WARNING - @mbg.generated
+        -->
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+		<result column="is_del" property="isDel" jdbcType="BIT"/>
+	</resultMap>
+
+	<resultMap id="BaseResultMapTwo" type="com.zzy.shopp.app.biz.model.Category">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+		<result column="is_del" property="isDel" jdbcType="BIT"/>
+		<collection property="products" ofType="com.zzy.shopp.app.biz.model.Product" column="id"
+					select="getProductList">
+			<result column="id" property="id" jdbcType="BIGINT"/>
+			<result column="name" property="name" jdbcType="VARCHAR"/>
+			<result column="sub_title" property="subTitle" jdbcType="VARCHAR"/>
+			<result column="original_price" property="originalPrice" jdbcType="DOUBLE"/>
+			<result column="promote_pice" property="promotePice" jdbcType="DOUBLE"/>
+			<result column="stock" property="stock" jdbcType="INTEGER"/>
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+			<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+			<result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+			<result column="is_del" property="isDel" jdbcType="BIT"/>
+			<result column="cid" property="cid" jdbcType="BIGINT"/>
+		</collection>
+	</resultMap>
+
+	<select id="getProductList" resultMap="com.zzy.shopp.app.biz.mapper.ProductMapper.BaseResultMap">
+		SELECT
+		`id`,
+		`cid`,
+		`name`,
+		`sub_title`,
+		`original_price`,
+		`promote_pice`,
+		`stock`,
+		`create_time`,
+		`update_time`,
+		`delete_time`,
+		`is_del`
+		FROM `s_product`
+		<where>
+			`cid` = #{id}
+		</where>
+	</select>
+
+	<sql id="basicSelectSql">
+		`id`,
+		`name`,
+		`create_time`,
+		`update_time`,
+		`delete_time`,
+		`is_del`
+	</sql>
+
+	<sql id="basicWhereColumn">
+		<if test="id != null">
+			AND `id` = #{id}
+		</if>
+		<if test="name != null">
+			AND `name` = #{name}
+		</if>
+		<if test="createTime != null">
+			AND `create_time` = #{createTime}
+		</if>
+		<if test="updateTime != null">
+			AND `update_time` = #{updateTime}
+		</if>
+		<if test="deleteTime != null">
+			AND `delete_time` = #{deleteTime}
+		</if>
+		<if test="isDel != null">
+			AND `is_del` = #{isDel}
+		</if>
+	</sql>
+
+	<sql id="basicWhereEntitySql">
+		<where>
+			<include refid="basicWhereColumn"/>
+		</where>
+	</sql>
+
+	<sql id="basicWhereMapSql">
+		<where>
+			<include refid="basicWhereColumn"/>
+		</where>
+	</sql>
+
+	<select id="getById" resultType="com.zzy.shopp.app.biz.model.Category">
+		SELECT
+		<include refid="basicSelectSql"/>
+		FROM `s_category`
+		<where>
+			`id` = #{id}
+		</where>
+		LIMIT 1;
+	</select>
+
+	<select id="getList" resultType="com.zzy.shopp.app.biz.model.Category">
+		SELECT
+		<include refid="basicSelectSql"/>
+		FROM `s_category`
+		<include refid="basicWhereEntitySql"/>
+		;
+	</select>
+
+	<select id="likeGetList" parameterType="com.zzy.shopp.app.biz.vo.CommonSelectVo"
+			resultMap="BaseResultMap">
+		SELECT
+		<include refid="basicSelectSql"/>
+		FROM `s_category`
+		<where>
+			<trim prefixOverrides="AND">
+				<if test="queryCriteria != null">
+					and CONCAT_WS(' ',
+					IFNULL(`id`,''),
+					IFNULL(`name`,''),
+					IFNULL(`create_time`,''),
+					IFNULL(`update_time`,''),
+					IFNULL(`delete_time`,''),
+					IFNULL(`is_del`,'')
+					) like CONCAT('%', #{queryCriteria}, '%')
+				</if>
+				and is_del = 0
+			</trim>
+		</where>
+	</select>
+
+	<select id="likeGetListAndChilds" parameterType="com.zzy.shopp.app.biz.vo.CommonSelectVo"
+			resultMap="BaseResultMapTwo">
+		SELECT
+		<include refid="basicSelectSql"/>
+		FROM `s_category`
+		<where>
+			<trim prefixOverrides="AND">
+				<if test="queryCriteria != null">
+					and CONCAT_WS(' ',
+					IFNULL(`id`,''),
+					IFNULL(`name`,''),
+					IFNULL(`create_time`,''),
+					IFNULL(`update_time`,''),
+					IFNULL(`delete_time`,''),
+					IFNULL(`is_del`,'')
+					) like CONCAT('%', #{queryCriteria}, '%')
+				</if>
+				and is_del = 0
+			</trim>
+		</where>
+		LIMIT 17;
+	</select>
+
+	<update id="update" parameterType="com.zzy.shopp.app.biz.model.Category">
+		UPDATE `s_category`
+		<set>
+			<if test="name != null">
+				`name` = #{name},
+			</if>
+			<if test="updateTime != null">
+				`update_time` = #{updateTime},
+			</if>
+			<if test="deleteTime != null">
+				`delete_time` = #{deleteTime},
+			</if>
+			<if test="isDel != null">
+				`is_del` = #{isDel},
+			</if>
+		</set>
+		<where>
+			`id` = #{id}
+		</where>
+	</update>
+
+
+	<update id="deleteById" parameterType="com.zzy.shopp.app.biz.model.Category">
+		UPDATE `s_category`
+		SET `is_del`=1
+		<where>
+			`id` = #{id}
+		</where>
+	</update>
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        `s_category`
+        (`id`,`name`,`create_time`,`update_time`,`delete_time`,`is_del`)
+        VALUES
+        (#{id},#{name},#{createTime},#{updateTime},#{deleteTime},#{isDel})
+    </insert>
+
+	<insert id="addList">
+		INSERT INTO
+		`s_category`
+		(`id`,`name`,`create_time`,`update_time`,`delete_time`,`is_del`)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id},#{item.name},#{item.createTime},#{item.updateTime},#{item.deleteTime},#{item.isDel})
+		</foreach>
+	</insert>
+
+
+</mapper>
